@@ -1,7 +1,9 @@
 import { Background, HeaderTitle } from "@react-navigation/elements";
 import { useLayoutEffect } from "react";
-import { StyleSheet, Text, View, TextInput, FlatList } from "react-native";
+import { StyleSheet, Text, View, TextInput, FlatList, Button } from "react-native";
 import { format } from 'date-fns';
+import ExpenseCard from "../../components/ExpenseCard";
+import PressableIcon from "../../components/PressableIcon";
 
 export default function HomeScreen({ navigation }) {
     const expenses = [
@@ -65,30 +67,30 @@ export default function HomeScreen({ navigation }) {
             date: format(new Date(), 'dd-MM-yyyy'),
             amount: 300,
         },
+        {
+            title: "Movie",
+            id: 11,
+            date: format(new Date(), 'dd-MM-yyyy'),
+            amount: 220,
+        },
     ];
 
     useLayoutEffect(() => {
         navigation.setOptions({
             title: "Your Expenses",
-            contentStyle: {
-                backgroundColor: '#fff',
-            },
-            headerShadowVisible: false,
-            headerTitleAlign: 'center',
+            headerRight: () => <PressableIcon onPress={()=>console.log("Hello!")} />
         })
     })
 
     function renderItem({ item }) {
+        const data = {
+            title: item.title,
+            date: item.date,
+            amount: item.amount,
+        }
+
         return (
-            <View>
-                <View>
-                    <Text>{item.title}</Text>
-                    <Text>{item.date}</Text>
-                </View>
-                <View>
-                    <Text>{item.amount}</Text>
-                </View>
-            </View>
+        <ExpenseCard {...data} />
         );
     }
 
@@ -102,6 +104,6 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
-        alignItems: "center",
+        padding: 21,
     },
 });
