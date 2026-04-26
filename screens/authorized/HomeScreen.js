@@ -2,11 +2,11 @@ import { Background, HeaderTitle } from "@react-navigation/elements";
 import { useLayoutEffect } from "react";
 import { StyleSheet, Text, View, TextInput, FlatList, Button } from "react-native";
 import { format } from 'date-fns';
+
 import ExpenseCard from "../../components/ExpenseCard";
 import PressableIcon from "../../components/PressableIcon";
 
-export default function HomeScreen({ navigation }) {
-    const expenses = [
+const expenses = [
         {
             title: "Online Shop",
             id: 1,
@@ -75,11 +75,13 @@ export default function HomeScreen({ navigation }) {
         },
     ];
 
+export default function HomeScreen({ navigation }) {
+
     useLayoutEffect(() => {
         navigation.setOptions({
             title: "Your Expenses",
-            headerRight: () => <PressableIcon onPress={()=>console.log("Hello!")} />
-        })
+            headerRight: () => <PressableIcon onPress={()=>navigation.navigate('ExpenseForm', {add: true})} />
+        }, []);
     })
 
     function renderItem({ item }) {

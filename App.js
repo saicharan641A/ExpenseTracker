@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from './screens/authorized/HomeScreen';
+import ExpenseFormScreen from './screens/authorized/ExpenseFormScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ function RootStack() {
   return (
     <Stack.Navigator screenOptions={style}>
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
+      <Stack.Screen name='ExpenseForm' component={ExpenseFormScreen} />
     </Stack.Navigator>
   );
 }
