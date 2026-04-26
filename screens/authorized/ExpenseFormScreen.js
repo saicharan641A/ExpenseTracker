@@ -63,7 +63,38 @@ export default function ExpenseFormScreen({ navigation, route }) {
       return;
     }
 
-    Alert.alert("Saved!", `Title: ${title}\nAmount: ₹${amount}\nDate: ${date}`);
+    const newExpense = {
+      id: add ? Date.now().toString() : params.id,
+      title,
+      date,
+      amount: Number(amount),
+    }
+
+    if (add) {
+      params.addExpense(newExpense);
+    } else {
+      params.updateExpense(newExpense);
+    }
+    navigation.goBack();
+  };
+
+  //handle Delete
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Expense",
+      "Are you sure you want to delete this?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            params.deleteExpense(params.id);
+            navigation.goBack();
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -111,6 +142,17 @@ export default function ExpenseFormScreen({ navigation, route }) {
       <TouchableOpacity style={styles.button} onPress={handleSave}>
         <Text style={styles.buttonText}>Save Expense</Text>
       </TouchableOpacity>
+
+      {/* Delete Button */}
+      {!add && (
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={handleDelete}
+        >
+          <Text style={styles.deleteText}>Delete Expense</Text>
+        </TouchableOpacity>
+      )}
+
     </View>
   );
 }
@@ -152,5 +194,17 @@ const styles = StyleSheet.create({
     color: "#0F172A",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  deleteButton: {
+    marginTop: 15,
+    backgroundColor: "#EF4444",
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+
+  deleteText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });

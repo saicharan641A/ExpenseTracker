@@ -2,11 +2,10 @@ import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Color } from "../assets/colors/color";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ExpenseCard({ title, date, amount }) {
+export default function ExpenseCard({ id, title, date, amount, onPress }) {
     const navigation = useNavigation();
-    const passData = { add: false, title: title, date: date, amount: amount }
     return (
-        <Pressable onPress={() => navigation.navigate('ExpenseForm', passData)}>
+        <Pressable onPress={onPress} android_ripple={{ color: "#334155" }}>
             <View style={styles.rootContainer}>
                 <View style={styles.container}>
                     <Text style={styles.title}>{title}</Text>
