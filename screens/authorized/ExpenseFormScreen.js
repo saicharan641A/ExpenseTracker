@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect } from "react";
+import { useLayoutEffect, useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -8,8 +8,11 @@ import {
   Alert,
 } from "react-native";
 import { Color } from "../../assets/colors/color";
+import { ExpenseContext } from "../../store/expenseContext";
+
 
 export default function ExpenseFormScreen({ navigation, route }) {
+  const { addExpense, updateExpense, deleteExpense } = useContext(ExpenseContext);
   const params = route.params;
   const add = params.add;
 
@@ -71,9 +74,9 @@ export default function ExpenseFormScreen({ navigation, route }) {
     }
 
     if (add) {
-      params.addExpense(newExpense);
+      addExpense(newExpense);
     } else {
-      params.updateExpense(newExpense);
+      updateExpense(newExpense);
     }
     navigation.goBack();
   };
@@ -89,7 +92,7 @@ export default function ExpenseFormScreen({ navigation, route }) {
           text: "Delete",
           style: "destructive",
           onPress: () => {
-            params.deleteExpense(params.id);
+            deleteExpense(params.id);
             navigation.goBack();
           },
         },

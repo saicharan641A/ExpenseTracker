@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from './screens/authorized/HomeScreen';
 import ExpenseFormScreen from './screens/authorized/ExpenseFormScreen';
+import { ExpenseContextProvider } from './store/expenseContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,9 +29,11 @@ function RootStack() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <StatusBar style='light' />
-      <RootStack />
-    </NavigationContainer>
+    <ExpenseContextProvider>
+      <NavigationContainer>
+        <StatusBar style='light' />
+        <RootStack />
+      </NavigationContainer>
+    </ExpenseContextProvider>
   );
 }

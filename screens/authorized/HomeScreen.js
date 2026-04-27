@@ -1,105 +1,22 @@
 import { Background, HeaderTitle } from "@react-navigation/elements";
-import { useLayoutEffect, useState, useCallback } from "react";
+import { useLayoutEffect, useState, useCallback, useContext } from "react";
 import { StyleSheet, Text, View, TextInput, FlatList, Button } from "react-native";
 import { format } from 'date-fns';
+import { ExpenseContext } from "../../store/expenseContext";
 
 import ExpenseCard from "../../components/ExpenseCard";
 import PressableIcon from "../../components/PressableIcon";
 
-const initialExpenses = [
-    {
-        title: "Online Shop",
-        id: '1',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 500,
-    },
-    {
-        title: "Groceries",
-        id: '2',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 1200,
-    },
-    {
-        title: "Electric Bill",
-        id: '3',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 800,
-    },
-    {
-        title: "Restaurant",
-        id: '4',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 650,
-    },
-    {
-        title: "Petrol",
-        id: '5',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 1000,
-    },
-    {
-        title: "Movie Tickets",
-        id: '6',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 400,
-    },
-    {
-        title: "Mobile Recharge",
-        id: '7',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 299,
-    },
-    {
-        title: "Gym Fee",
-        id: '8',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 1500,
-    },
-    {
-        title: "Coffee",
-        id: '9',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 150,
-    },
-    {
-        title: "Transport",
-        id: '10',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 300,
-    },
-    {
-        title: "Movie",
-        id: '11',
-        date: format(new Date(), 'dd-MM-yyyy'),
-        amount: 220,
-    },
-];
 
 export default function HomeScreen({ navigation }) {
-    const [expenses, setExpenses] = useState(initialExpenses);
-
-    const addExpense = useCallback((expense) => {
-        setExpenses((prv) => [expense, ...prv]);
-    }, []);
-
-    const updateExpense = useCallback((updatedExpense) => {
-        setExpenses((prev) =>
-            prev.map((item) =>
-                item.id === updatedExpense.id ? updatedExpense : item
-            )
-        );
-    }, []);
-
-    const deleteExpense = useCallback((id) => {
-        setExpenses((prev) => prev.filter(item => item.id !== id));
-    }, []);
+    const { expenses } = useContext(ExpenseContext);
 
     useLayoutEffect(() => {
         navigation.setOptions({
             title: "Your Expenses",
-            headerRight: () => <PressableIcon onPress={() => navigation.navigate('ExpenseForm', { add: true, addExpense })} />
+            headerRight: () => <PressableIcon onPress={() => navigation.navigate('ExpenseForm', { add: true })} />
         });
-    }, [navigation, addExpense]);
+    }, [navigation]);
 
     function parseDate(dateStr) {
         const [day, month, year] = dateStr.split("-");
@@ -123,8 +40,6 @@ export default function HomeScreen({ navigation }) {
                 navigation.navigate("ExpenseForm", {
                     add: false,
                     ...item,
-                    updateExpense,
-                    deleteExpense,
                 })
             } />
         );
