@@ -1,5 +1,9 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { format } from "date-fns";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+const STORAGE_KEY = 'expenses';
+
 
 export const ExpenseContext = createContext({
     expenses: [],
@@ -80,6 +84,34 @@ const initialExpenses = [
 
 export function ExpenseContextProvider({ children }) {
     const [expenses, setExpenses] = useState(initialExpenses);
+
+    useEffect(() => {
+        async function loadExpense() {
+            try {
+                const storedData = await AsyncStorage.getItem(STORAGE_KEY);
+
+                if (storedData) {
+                    setExpenses(JSON.parse(storedData));
+                }
+            } catch (error) {
+                console.log("Error loading data: " + error);
+            }
+        }
+
+        loadExpense();
+    }, []);
+
+    useEffect(() => {
+        async function saveExpense() {
+            try {
+                await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+            }catch(error) {
+                console.log("Error saving data:", error);
+            }
+        }
+
+        saveExpense();
+    }, [expenses])
 
     function addExpense(expense) {
         setExpenses((prev) => [expense, ...prev]);
