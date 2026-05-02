@@ -12,7 +12,7 @@ export default function ExpenseCard({ id, title, date, amount, onPress }) {
                     <Text style={styles.date}>{date}</Text>
                 </View>
                 <View style={styles.amtContainer}>
-                    <Text style={styles.amount}>$ {amount}</Text>
+                    <Text style={styles.amount}>₹ {amount}</Text>
                 </View>
             </View>
         </Pressable>

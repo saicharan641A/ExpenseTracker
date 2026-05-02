@@ -6,6 +6,7 @@ import { ExpenseContext } from "../../store/expenseContext";
 
 import ExpenseCard from "../../components/ExpenseCard";
 import PressableIcon from "../../components/PressableIcon";
+import ExpenseSummary from "../../components/ExpenseSummary";
 
 
 export default function HomeScreen({ navigation }) {
@@ -45,8 +46,13 @@ export default function HomeScreen({ navigation }) {
         );
     }
 
+    const totalAmount = expenses.reduce((sum, item) => {
+        return sum + item.amount;
+    }, 0);
+
     return (
         <View style={styles.rootContainer}>
+            <ExpenseSummary totalAmount={totalAmount} />
             <FlatList data={sortedExpenses} keyExtractor={item => item.id.toString()} renderItem={({ item }) => renderItem({ item })} />
         </View>
     );
