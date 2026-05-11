@@ -3,6 +3,7 @@ import { useLayoutEffect, useState, useCallback, useContext } from "react";
 import { StyleSheet, Text, View, TextInput, FlatList, Button } from "react-native";
 import { format } from 'date-fns';
 import { ExpenseContext } from "../../store/expenseContext";
+import { ActivityIndicator } from "react-native";
 
 import ExpenseCard from "../../components/ExpenseCard";
 import PressableIcon from "../../components/PressableIcon";
@@ -10,7 +11,7 @@ import ExpenseSummary from "../../components/ExpenseSummary";
 
 
 export default function HomeScreen({ navigation }) {
-    const { expenses } = useContext(ExpenseContext);
+    const { expenses, isLoading } = useContext(ExpenseContext);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -34,6 +35,14 @@ export default function HomeScreen({ navigation }) {
             title: item.title,
             date: item.date,
             amount: item.amount,
+        }
+
+        if (isLoading) {
+            return (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#38BDF8" />
+                </View>
+            );
         }
 
         return (
@@ -62,5 +71,11 @@ const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
         padding: 21,
+    },
+    
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
