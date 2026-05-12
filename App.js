@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useContext } from 'react';
 
 import HomeScreen from './screens/authorized/HomeScreen';
 import ExpenseFormScreen from './screens/authorized/ExpenseFormScreen';
 import { ExpenseContextProvider } from './store/expenseContext';
+import { AuthContext, AuthContextProvider } from './store/authContext';
+import LoginScreen from './screens/unauthorized/LoginScreen';
+import SignupScreen from './screens/unauthorized/SignupScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,22 +22,60 @@ const style = {
   headerTitleAlign: 'center',
 }
 
-function RootStack() {
-  return (
-    <Stack.Navigator screenOptions={style}>
-      <Stack.Screen name='HomeScreen' component={HomeScreen} />
-      <Stack.Screen name='ExpenseForm' component={ExpenseFormScreen} />
-    </Stack.Navigator>
-  );
-}
-
 export default function App() {
-  return (
-    <ExpenseContextProvider>
+  const authCtx = useContext(AuthContext);
+
+  function Navigation() {
+
+    const authCtx = useContext(AuthContext);
+
+    return (
       <NavigationContainer>
-        <StatusBar style='light' />
-        <RootStack />
+
+        <Stack.Navigator screenOptions={style}>
+
+          {authCtx.isAuthenticated ? (
+            <>
+              <Stack.Screen
+                name="HomeScreen"
+                component={HomeScreen}
+              />
+
+              <Stack.Screen
+                name="ExpenseForm"
+                component={ExpenseFormScreen}
+              />
+            </>
+          ) : (
+            <>
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                  headerBackVisible: false,
+                }}
+              />
+
+              <Stack.Screen
+                name="SignUp"
+                component={SignupScreen}
+              />
+            </>
+          )}
+
+        </Stack.Navigator>
+
       </NavigationContainer>
-    </ExpenseContextProvider>
+    );
+  }
+  return (
+    <>
+      <StatusBar style='light' />
+      <AuthContextProvider>
+        <ExpenseContextProvider>
+          <Navigation />
+        </ExpenseContextProvider>
+      </AuthContextProvider>
+    </>
   );
 }
