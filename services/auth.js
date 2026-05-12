@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_KEY = "AIzaSyBWmZBG0Axr_QW_FxPB9V9ILeoMiPds20s";
+const API_KEY = "YOUR_API_KEY";
 
 export async function createUser(email, password) {
 
