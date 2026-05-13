@@ -1,6 +1,7 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { axiosInstance } from "../services/http";
+import { AuthContext } from "./authContext";
 
 const STORAGE_KEY = 'expenses';
 
@@ -14,15 +15,19 @@ export const ExpenseContext = createContext({
 });
 
 
+
 export function ExpenseContextProvider({ children }) {
     const [expenses, setExpenses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const authCtx = useContext(AuthContext);
+
     useEffect(() => {
         async function fetchExpense() {
+            if (!authCtx.userId) return;
             setIsLoading(true);
             try {
-                const response = await axiosInstance.get('/expenses.json');
+                const response = await axiosInstance.get(`/users/${authCtx.userId}/expenses.json`);
 
                 const loadExpenses = [];
                 if (response.data) {
@@ -57,12 +62,12 @@ export function ExpenseContextProvider({ children }) {
         }
 
         fetchExpense();
-    }, []);
+    }, [authCtx.userId]);
 
 
     async function addExpense(expense) {
         try {
-            const response = await axiosInstance.post('/expenses.json', expense);
+            const response = await axiosInstance.post(`/users/${authCtx.userId}/expenses.json`, expense);
 
             const id = response.data.name;
 
@@ -82,7 +87,7 @@ export function ExpenseContextProvider({ children }) {
             const { id, ...expenseData } = expense;
 
             await axiosInstance.put(
-                `/expenses/${id}.json`,
+                `/users/${authCtx.userId}/expenses/${id}.json`,
                 expenseData
             );
 
@@ -99,7 +104,7 @@ export function ExpenseContextProvider({ children }) {
     async function deleteExpense(id) {
         try {
             await axiosInstance.delete(
-                `/expenses/${id}.json`
+                `/users/${authCtx.userId}/expenses/${id}.json`
             );
 
             setExpenses((prev) =>

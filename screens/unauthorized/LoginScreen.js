@@ -24,7 +24,7 @@ export default function LoginScreen({ navigation }) {
 
             const data = await login(email, password);
 
-            authCtx.authenticate(data.idToken);
+            authCtx.authenticate(data.idToken, data.localId);
         } catch (error) {
 
             Alert.alert(

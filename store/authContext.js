@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 
 export const AuthContext = createContext({
     token: '',
+    userId: '',
     isAuthenticated: false,
     authenticate: (token) => {},
     logout: () => {},
@@ -10,18 +11,21 @@ export const AuthContext = createContext({
 export function AuthContextProvider({ children }) {
 
     const [authToken, setAuthToken] = useState();
+    const [userId, setUserId] = useState();
 
-    function authenticate(token) {
-        console.log(token);
+    function authenticate(token, userId) {
         setAuthToken(token);
+        setUserId(userId);
     }
 
     function logout() {
         setAuthToken(null);
+        setUserId(null);
     }
 
     const value = {
         token: authToken,
+        userId,
         isAuthenticated: !!authToken,
         authenticate,
         logout,
